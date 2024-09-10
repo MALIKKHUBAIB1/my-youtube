@@ -3,11 +3,10 @@ import SideBar from "../Component/SideBar";
 
 function Body() {
   return (
-    <div>
-      <MainContainer />
+    <div className="grid grid-flow-col">
       <SideBar />
+      <MainContainer />
     </div>
   );
 }
-
 export default Body;
