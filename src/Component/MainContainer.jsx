@@ -3,8 +3,7 @@ import VideoCantiner from "./VideoContiner";
 
 function MainContainer() {
   return (
-    <div className="col-span-11 bg-sky-700 text-white">
-      MainContainer
+    <div className="col-span-11 text-black">
       <ButtonList />
       <VideoCantiner />
     </div>

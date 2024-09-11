@@ -1,21 +1,35 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import Root from "./Pages/Root";
+// import Root from "./Pages/Root";
 import Body from "./Pages/Body";
+import WatchPage from "./Pages/WatchPage";
+import MainContainer from "./Component/MainContainer";
+import Header from "./Pages/Header";
+import ErrorPage from "./utils/Error/ErrorPage";
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Root />,
+      element: <Body />,
+      errorElement: <ErrorPage message="failed to load page" status={404} />,
       children: [
         {
           path: "/",
-          element: <Body />,
+          element: <MainContainer />,
+        },
+        {
+          path: "watch",
+          element: <WatchPage />,
         },
       ],
     },
   ]);
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <>
+      <Header />
+      <RouterProvider router={router}></RouterProvider>
+    </>
+  );
 }
 
 export default App;

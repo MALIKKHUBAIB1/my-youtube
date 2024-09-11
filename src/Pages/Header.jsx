@@ -1,12 +1,19 @@
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { toogleMenu } from "../utils/appSlice";
+import { Link } from "react-router-dom";
 
 function Header() {
-  const isMenuOpen = useSelector((state) => state?.menu?.isMenuOpen);
-  console.log(isMenuOpen);
+  const dispatch = useDispatch();
+  const toogleMenuHandler = () => {
+    dispatch(toogleMenu());
+  };
   return (
-    <header className="grid grid-flow-col shadow-md m-2 items-center sticky ">
+    <header className="grid grid-flow-col shadow-md m-2 items-center sticky top-0 ">
       <div className="flex items-center justify-start col-span-1">
-        <div className="m-3 text-3xl cursor-pointer hover:bg-gray-100">
+        <div
+          className="m-3 text-3xl cursor-pointer hover:bg-gray-100"
+          onClick={toogleMenuHandler}
+        >
           <svg
             className=""
             xmlns="http://www.w3.urg/2000/svg"
