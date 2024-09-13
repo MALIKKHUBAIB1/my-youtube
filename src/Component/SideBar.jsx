@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function SideBar() {
   return (
-    <aside className="col-span-1 bg-black text-white h-screen p-4  ">
+    <aside className="w-60 bg-black text-white h-screen p-4 fixed left-0">
       <h1 className="text-2xl font-bold mb-4">Section of Heading</h1>
       <ul className="space-y-2">
         <Link to="/">

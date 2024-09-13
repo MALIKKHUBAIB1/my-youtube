@@ -1,54 +1,72 @@
 import { useDispatch } from "react-redux";
 import { toogleMenu } from "../utils/appSlice";
-import { Link } from "react-router-dom";
-
+import SearchBar from "../Component/Header/SearchBar";
+import UserHandler from "../Component/Header/UserHandler";
+import Logo from "../Component/Header/Logo";
+import { useEffect, useState } from "react";
+import { SUGGESTION_URL } from "../utils/constant";
+import ErrorPage from "../utils/Error/ErrorPage";
 function Header() {
+  const [searchQuaery, setSearchQueary] = useState("");
+  const [suggestion, setSuggestion] = useState([]);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const toogleMenuHandler = () => {
     dispatch(toogleMenu());
   };
+
+  function inputChnageHandler(e) {
+    setSearchQueary(e);
+  }
+  const getSearchSuggestionHandler = async (url) => {
+    try {
+      const response = await fetch(url + searchQuaery);
+      if (!response.ok) return;
+
+      const data = await response.json();
+      console.log(data);
+      setSuggestion(data);
+    } catch (error) {
+      setError(error);
+    }
+  };
+
+  // for each and every key press i can make an api call
+  // or instead of making an api call for each key stroke we can make an api call if the diffrence beyween two api calls is 200ms
+  // or we can decline the api call if the diffrence is greater than 200ms
+  useEffect(() => {
+    let debounceFn = setTimeout(() => {
+      if(searchQuaery){
+      getSearchSuggestionHandler(SUGGESTION_URL);
+      }
+    }, 2000);
+    return () => clearTimeout(debounceFn);
+
+  }, [searchQuaery]);
+  // dry run it
+  // key press -> i
+  // component will  render
+  // and then useEffect call and register the timer when the timer is complete it will  make an api call  after the 200ms
+  // and then in unmounting phase we have to clean the timer using the clearTimeout becuse of the memory leaks
+
+  // key press -> ip
+  // component will  render
+  // and then useEffect call and register the timer when the timer is complete it will  make an api call  after the 200ms
+  // and then in unmounting phase we have to clean the timer using the clearTimeout becuse of the memory leaks
+
+  if (error) {
+    return (
+      <ErrorPage
+        message={error.message || "failed to fetch Data"}
+        status={error.status || 401}
+      />
+    );
+  }
   return (
     <header className="grid grid-flow-col shadow-md m-2 items-center sticky top-0 ">
-      <div className="flex items-center justify-start col-span-1">
-        <div
-          className="m-3 text-3xl cursor-pointer hover:bg-gray-100"
-          onClick={toogleMenuHandler}
-        >
-          <svg
-            className=""
-            xmlns="http://www.w3.urg/2000/svg"
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            focusable="false"
-            aria-hidden="true"
-          >
-            <path d="M21 6H3V5h18v1zm0 5H3v1h18v-1zm0 6H3v1h18v-1z"></path>
-          </svg>
-        </div>
-        <img
-          src="https://cdn.mos.cms.futurecdn.net/8gzcr6RpGStvZFA2qRt4v6.jpg"
-          alt="logo"
-          className="h-16 mx-3"
-        />
-      </div>
-
-      <div className="col-span-10 text-center ">
-        <input
-          type="search"
-          placeholder="search"
-          className="p-2 w-1/2 border  border-gray-600 rounded-l-full"
-        />
-        <button className="border border-gray-600 rounded-r-full p-2 text-center bg-gray-100">
-          Search
-        </button>
-      </div>
-      <div className="col-span-1">
-        <img
-          src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
-          className="w-10 h-9"
-        />
-      </div>
+      <Logo toogleMenuHandler={toogleMenuHandler} />
+      <SearchBar inputChnageHandler={inputChnageHandler} value={searchQuaery} />
+      <UserHandler />
     </header>
   );
 }

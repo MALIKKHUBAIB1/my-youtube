@@ -18,7 +18,7 @@ function VideoContiner() {
   }
 
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap ">
       {data &&
         data.map((data) => {
           return <VideoCard info={data} key={data.id} />;

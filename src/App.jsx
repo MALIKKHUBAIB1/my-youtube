@@ -18,7 +18,7 @@ function App() {
           element: <MainContainer />,
         },
         {
-          path: "watch",
+          path: "watch/:id",
           element: <WatchPage />,
         },
       ],

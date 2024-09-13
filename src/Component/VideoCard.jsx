@@ -6,7 +6,7 @@ function VideoCard({ info }) {
   const { channelTitle, title, thumbnails } = snippet;
 
   return (
-    <Link to={`watch?v=${info.id}`}>
+    <Link to={`/watch/${info.id}`}>
       <div className="p-2 m-2 w-72 shadow-md col-span-3">
         <img
           src={thumbnails?.medium?.url}
