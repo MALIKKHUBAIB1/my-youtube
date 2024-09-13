@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toogleMenu } from "../utils/appSlice";
 import SearchBar from "../Component/Header/SearchBar";
 import UserHandler from "../Component/Header/UserHandler";
@@ -6,15 +6,16 @@ import Logo from "../Component/Header/Logo";
 import { useEffect, useState } from "react";
 import { SUGGESTION_URL } from "../utils/constant";
 import ErrorPage from "../utils/Error/ErrorPage";
+import { cacheResults } from "../utils/appstore/Slice/searchslice";
 function Header() {
   const [searchQuaery, setSearchQueary] = useState("");
   const [suggestion, setSuggestion] = useState([]);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  const searchCache = useSelector((state) => state.search);
   const toogleMenuHandler = () => {
     dispatch(toogleMenu());
   };
-
   function inputChnageHandler(e) {
     setSearchQueary(e);
   }
@@ -22,10 +23,14 @@ function Header() {
     try {
       const response = await fetch(url + searchQuaery);
       if (!response.ok) return;
-
       const data = await response.json();
-      console.log(data);
-      setSuggestion(data);
+      if (data && data.length > 0) {
+        setSuggestion(data[1]);
+      }
+      dispatch(cacheResults({ [searchQuaery]: data[1] }));
+      if (data.length === 0) {
+        setSuggestion("No suggestion found");
+      }
     } catch (error) {
       setError(error);
     }
@@ -36,12 +41,14 @@ function Header() {
   // or we can decline the api call if the diffrence is greater than 200ms
   useEffect(() => {
     let debounceFn = setTimeout(() => {
-      if(searchQuaery){
-      getSearchSuggestionHandler(SUGGESTION_URL);
+      // check if the queary in the memory
+      if (searchCache[searchQuaery]) {
+        setSuggestion(searchCache[searchQuaery]);
+      } else if (searchQuaery) {
+        getSearchSuggestionHandler(SUGGESTION_URL);
       }
-    }, 2000);
+    }, 200);
     return () => clearTimeout(debounceFn);
-
   }, [searchQuaery]);
   // dry run it
   // key press -> i
@@ -63,9 +70,13 @@ function Header() {
     );
   }
   return (
-    <header className="grid grid-flow-col shadow-md m-2 items-center sticky top-0 ">
+    <header className="grid grid-flow-col shadow-md p-1 items-center sticky top-0 bg-white z-50">
       <Logo toogleMenuHandler={toogleMenuHandler} />
-      <SearchBar inputChnageHandler={inputChnageHandler} value={searchQuaery} />
+      <SearchBar
+        inputChnageHandler={inputChnageHandler}
+        value={searchQuaery}
+        suggestion={suggestion}
+      />
       <UserHandler />
     </header>
   );
