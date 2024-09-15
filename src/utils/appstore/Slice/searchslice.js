@@ -7,13 +7,14 @@ const searchSlice = createSlice({
     cacheResults: (state, action) => {
       // return { ...action.payload, ...state }; we can not do like this
       // state = Object.assign(state, action.payload);
+      //LRU (least recently used) if we have more than one hundred cache results then delete from starting
       if (Object.keys(state).length > 100) {
         const firstKey = Object.keys(state)[0]; // Get the first key
         if (firstKey) {
           delete state[firstKey]; // Delete the first key-value pair
         }
       }
-      state = Object.assign(state, action.payload);
+      Object.assign(state, action.payload);
     },
   },
 });

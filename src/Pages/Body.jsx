@@ -6,10 +6,10 @@ function Body() {
   const isMenuOpen = useSelector((state) => state?.menu?.isMenuOpen);
 
   return (
-    <div className="flex">
+    <div className="grid grid-flow-col">
       {isMenuOpen && <SideBar />}
-      <div className={`flex-1 ml-${isMenuOpen ? '60' : '0'} p-4`}>
-        <Outlet />
+      <div className={`col-span-11 ${isMenuOpen ? "ml-60" : "ml-0"}`}>
+      <Outlet />
       </div>
     </div>
   );
