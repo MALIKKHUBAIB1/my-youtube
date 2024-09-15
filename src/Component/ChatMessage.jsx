@@ -1,15 +1,17 @@
 import React from "react";
 
-function ChatMessage({name,message}) {
+function ChatMessage({ name, message }) {
   return (
-    <div className="flex items-center shadow-md rounded-lg">
+    <div className="flex items-start p-2 mb-2 bg-white shadow-sm rounded-lg">
       <img
-        className="w-8 h-8"
+        className="w-8 h-8 rounded-full mr-2"
         src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
-        alt="comment logo user"
+        alt="user avatar"
       />
-      <span className="font-bold p-3">{name}</span>
-      <div className="text-sm">{message}</div>
+      <div>
+        <div className="font-bold text-sm">{name}</div>
+        <div className="text-sm">{message}</div>
+      </div>
     </div>
   );
 }
