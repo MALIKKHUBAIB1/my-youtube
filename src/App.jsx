@@ -6,6 +6,8 @@ import WatchPage from "./Pages/WatchPage";
 import MainContainer from "./Component/MainContainer";
 import Header from "./Pages/Header";
 import ErrorPage from "./utils/Error/ErrorPage";
+import Demo from "./Pages/Demo";
+import Demo2 from "./Pages/Demo2";
 function App() {
   const router = createBrowserRouter([
     {
@@ -20,6 +22,14 @@ function App() {
         {
           path: "watch/:id",
           element: <WatchPage />,
+        },
+        {
+          path: "demo",
+          element: <Demo />,
+        },
+        {
+          path: "demo2",
+          element: <Demo2 />,
         },
       ],
     },
